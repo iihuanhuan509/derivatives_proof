@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>常用求导公式的证明</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Zilla+Slab:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false,
+      trust: true
+    });"></script>
+  <style>
+    :root {
+      --bg:           #F7F4EE;
+      --paper:        #FDFBF6;
+      --text:         #1A1714;
+      --text-muted:   #5A5450;
+      --navy:         #1B3A5C;
+      --navy-light:   #2A5080;
+      --gold:         #9A7A28;
+      --gold-light:   #C8A84A;
+      --proof-bg:     #F1F5FA;
+      --thm-bg:       #EBF1F8;
+      --border:       #CCC4B4;
+      --border-light: #E0D8CC;
+      --shadow:       rgba(27, 58, 92, 0.07);
+      --note-bg:      #FEF9EC;
+      --note-border:  #C8A84A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+      font-size: 16px;
+      line-height: 1.95;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    header {
+      background: var(--navy);
+      color: #fff;
+      padding: 64px 40px 52px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(45deg, transparent, transparent 28px,
+          rgba(255,255,255,0.018) 28px, rgba(255,255,255,0.018) 56px);
+      pointer-events: none;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent 0%, var(--gold-light) 30%, var(--gold-light) 70%, transparent 100%);
+    }
+    .course-label {
+      font-family: 'Zilla Slab', serif;
+      font-size: 12px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 18px;
+    }
+    header h1 {
+      font-size: 2.3rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .subtitle {
+      color: rgba(255,255,255,0.62);
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+    }
+    .ornament {
+      margin: 22px auto 0;
+      width: 100px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+    }
+
+    /* ── Layout ──────────────────────────────────────────── */
+    main {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 44px 28px 88px;
+    }
+
+    /* ── TOC ─────────────────────────────────────────────── */
+    .toc {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--navy);
+      padding: 26px 32px;
+      margin-bottom: 52px;
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 2px 14px var(--shadow);
+    }
+    .toc-heading {
+      font-family: 'Zilla Slab', serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 18px;
+      font-weight: 600;
+    }
+    .toc ol {
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 36px;
+    }
+    .toc li {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+      break-inside: avoid;
+    }
+    .toc a {
+      color: var(--navy);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .toc a:hover { color: var(--gold); }
+
+    /* ── Sections ────────────────────────────────────────── */
+    .section { margin-bottom: 60px; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 28px;
+      padding-bottom: 11px;
+      border-bottom: 2px solid var(--navy);
+    }
+    .section-number {
+      font-family: 'Zilla Slab', serif;
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Theorem boxes ───────────────────────────────────── */
+    .theorem {
+      background: var(--thm-bg);
+      border-left: 4px solid var(--navy);
+      padding: 18px 24px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+      box-shadow: 0 1px 5px var(--shadow);
+    }
+    .theorem-title {
+      font-family: 'Zilla Slab', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ── Proof boxes ─────────────────────────────────────── */
+    .proof {
+      background: var(--paper);
+      border: 1px solid var(--border-light);
+      padding: 22px 26px;
+      margin: 14px 0;
+      border-radius: 4px;
+      position: relative;
+    }
+    .proof-title {
+      font-family: 'Zilla Slab', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .proof-title::before {
+      content: '▪';
+      color: var(--gold);
+      margin-right: 7px;
+      font-size: 9px;
+    }
+
+    /* ── Note boxes ──────────────────────────────────────── */
+    .note {
+      background: var(--note-bg);
+      border-left: 3px solid var(--note-border);
+      padding: 13px 18px;
+      margin: 14px 0;
+      font-size: 14.5px;
+      color: var(--text-muted);
+      border-radius: 0 3px 3px 0;
+      line-height: 2.0;
+    }
+    .note-label {
+      display: inline-block;
+      font-family: 'Zilla Slab', serif;
+      font-weight: 600;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* ── Subsections ─────────────────────────────────────── */
+    .subsection { margin: 32px 0; }
+    .subsection-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--navy-light);
+      margin-bottom: 14px;
+      padding-left: 12px;
+      border-left: 3px solid var(--gold-light);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Paragraphs ──────────────────────────────────────── */
+    p { margin-bottom: 10px; }
+
+    /* ── Summary table ───────────────────────────────────── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      box-shadow: 0 2px 14px var(--shadow);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .summary-table thead tr {
+      background: var(--navy);
+      color: #fff;
+    }
+    .summary-table th {
+      padding: 13px 18px;
+      text-align: left;
+      font-weight: 500;
+      font-family: 'Zilla Slab', serif;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .summary-table td {
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+    .summary-table tbody tr:nth-child(even) { background: var(--thm-bg); }
+    .summary-table tbody tr:nth-child(odd)  { background: var(--paper); }
+    .summary-table tbody tr:last-child td { border-bottom: none; }
+    .table-note { font-size: 12.5px; color: var(--text-muted); }
+
+    /* ── Scroll fade-in ──────────────────────────────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-light);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Responsive ──────────────────────────────────────── */
+    @media (max-width: 640px) {
+      header h1 { font-size: 1.6rem; }
+      main { padding: 24px 16px 60px; }
+      .toc ol { columns: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="course-label">高等数学 · 微分学</div>
+  <h1>常用求导公式的证明</h1>
+  <div class="subtitle">面向大一新生的系统推导</div>
+  <div class="ornament"></div>
+</header>
+
+<main>
+
+  <!-- TOC -->
+  <div class="toc fade-in">
+    <div class="toc-heading">目　录</div>
+    <ol>
+      <li><a href="#sec-def">导数的定义与基本极限</a></li>
+      <li><a href="#sec-power">幂函数 $x^n$</a></li>
+      <li><a href="#sec-exp">指数函数 $e^x$ 与 $a^x$</a></li>
+      <li><a href="#sec-log">对数函数 $\ln x$ 与 $\log_a x$</a></li>
+      <li><a href="#sec-trig">三角函数 $\sin x$、$\cos x$、$\tan x$</a></li>
+      <li><a href="#sec-invtrig">反三角函数</a></li>
+      <li><a href="#sec-rules">四则运算法则</a></li>
+      <li><a href="#sec-chain">链式法则</a></li>
+      <li><a href="#sec-summary">公式汇总表</a></li>
+    </ol>
+  </div>
+
+  <!-- §0 Definition -->
+  <div class="section fade-in" id="sec-def">
+    <div class="section-header">
+      <span class="section-number">§ 0</span>
+      <span class="section-title">导数的定义与基本极限</span>
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定义（导数）</div>
+      <p>设函数 $f(x)$ 在点 $x_0$ 的某邻域内有定义。若下列极限存在：</p>
+      $$f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}$$
+      <p>则称 $f$ 在 $x_0$ 处<strong>可导</strong>，该极限值即为 $f$ 在 $x_0$ 处的<strong>导数</strong>。</p>
+    </div>
+
+    <p>下文将 $x_0$ 简记为 $x$，增量记为 $h$。所有公式均从此定义出发严格推导。</p>
+
+    <div class="note">
+      <span class="note-label">两个基本极限（将反复使用）</span><br>
+      $$\lim_{h \to 0} \frac{\sin h}{h} = 1 \qquad \lim_{h \to 0} \frac{e^h - 1}{h} = 1$$
+      以及重要极限 $\displaystyle\lim_{t \to 0}(1+t)^{1/t} = e$，由此可得 $\displaystyle\lim_{t \to 0}\frac{\ln(1+t)}{t} = 1$。
+    </div>
+  </div>
+
+  <!-- §1 Power Rule -->
+  <div class="section fade-in" id="sec-power">
+    <div class="section-header">
+      <span class="section-number">§ 1</span>
+      <span class="section-title">幂函数的导数</span>
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定理 1（幂法则）</div>
+      <p>设 $n$ 为正整数，则</p>
+      $$(x^n)' = nx^{n-1}$$
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">证明</div>
+      <p>由定义：</p>
+      $$(x^n)' = \lim_{h \to 0} \frac{(x+h)^n - x^n}{h}$$
+      <p>对 $(x+h)^n$ 使用<strong>二项式定理</strong>展开：</p>
+      $$(x+h)^n = x^n + \binom{n}{1}x^{n-1}h + \binom{n}{2}x^{n-2}h^2 + \cdots + h^n$$
+      <p>代入，分子中 $x^n$ 消去：</p>
+      $$= \lim_{h \to 0} \frac{nx^{n-1}h + \binom{n}{2}x^{n-2}h^2 + \cdots + h^n}{h}$$
+      <p>约去公因子 $h$：</p>
+      $$= \lim_{h \to 0} \left(nx^{n-1} + \binom{n}{2}x^{n-2}h + \cdots + h^{n-1}\right)$$
+      <p>令 $h \to 0$，含 $h$ 的各项均趋于 $0$，故</p>
+      $$(x^n)' = nx^{n-1} \qquad \blacksquare$$
+    </div>
+
+    <div class="note">
+      <span class="note-label">推广</span><br>
+      对任意实数 $\alpha$，$(x^\alpha)' = \alpha x^{\alpha - 1}$ 均成立（可借助对数求导法推广证明）。
+      例如 $(\sqrt{x})' = \dfrac{1}{2\sqrt{x}}$，$\left(\dfrac{1}{x}\right)' = -\dfrac{1}{x^2}$。
+    </div>
+  </div>
+
+  <!-- §2 Exponential -->
+  <div class="section fade-in" id="sec-exp">
+    <div class="section-header">
+      <span class="section-number">§ 2</span>
+      <span class="section-title">指数函数的导数</span>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">2.1　自然指数 $e^x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 2</div>
+        $$(e^x)' = e^x$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        $$(e^x)' = \lim_{h \to 0} \frac{e^{x+h} - e^x}{h} = e^x \cdot \lim_{h \to 0} \frac{e^h - 1}{h}$$
+        <p>由基本极限 $\displaystyle\lim_{h \to 0}\dfrac{e^h-1}{h} = 1$，得：</p>
+        $$(e^x)' = e^x \cdot 1 = e^x \qquad \blacksquare$$
+      </div>
+      <div class="note">
+        <span class="note-label">基本极限的验证</span><br>
+        令 $t = e^h - 1$，则 $h = \ln(1+t)$，$h \to 0 \Leftrightarrow t \to 0$，于是
+        $$\lim_{h \to 0}\frac{e^h-1}{h} = \lim_{t \to 0}\frac{t}{\ln(1+t)} = \lim_{t \to 0}\frac{1}{\frac{1}{t}\ln(1+t)} = \frac{1}{\ln\left[\lim_{t\to 0}(1+t)^{1/t}\right]} = \frac{1}{\ln e} = 1$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">2.2　一般指数 $a^x$（$a &gt; 0,\ a \neq 1$）</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 3</div>
+        $$(a^x)' = a^x \ln a$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        <p>将 $a^x$ 改写为自然指数形式：$a^x = e^{x \ln a}$。</p>
+        <p>令 $u = x \ln a$（$\ln a$ 为常数），由定理 2 和链式法则（§8）：</p>
+        $$(a^x)' = \left(e^{x\ln a}\right)' = e^{x \ln a} \cdot (x \ln a)' = e^{x\ln a} \cdot \ln a = a^x \ln a \qquad \blacksquare$$
+      </div>
+    </div>
+  </div>
+
+  <!-- §3 Logarithm -->
+  <div class="section fade-in" id="sec-log">
+    <div class="section-header">
+      <span class="section-number">§ 3</span>
+      <span class="section-title">对数函数的导数</span>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">3.1　自然对数 $\ln x$（$x &gt; 0$）</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 4</div>
+        $$(\ln x)' = \frac{1}{x}$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        $$(\ln x)' = \lim_{h \to 0}\frac{\ln(x+h) - \ln x}{h} = \lim_{h \to 0}\frac{1}{h}\ln\!\left(1 + \frac{h}{x}\right)$$
+        <p>令 $t = \dfrac{h}{x}$，则 $h = tx$，且 $h \to 0 \Leftrightarrow t \to 0$：</p>
+        $$= \lim_{t \to 0}\frac{1}{tx}\ln(1+t) = \frac{1}{x}\lim_{t \to 0}\frac{\ln(1+t)}{t}$$
+        <p>由基本极限 $\displaystyle\lim_{t \to 0}\dfrac{\ln(1+t)}{t} = 1$，得：</p>
+        $$(\ln x)' = \frac{1}{x} \qquad \blacksquare$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">3.2　一般对数 $\log_a x$（$a &gt; 0,\ a \neq 1,\ x &gt; 0$）</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 5</div>
+        $$(\log_a x)' = \frac{1}{x \ln a}$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        <p>由换底公式 $\log_a x = \dfrac{\ln x}{\ln a}$（其中 $\ln a$ 为常数），利用定理 4：</p>
+        $$(\log_a x)' = \left(\frac{\ln x}{\ln a}\right)' = \frac{1}{\ln a} \cdot (\ln x)' = \frac{1}{\ln a} \cdot \frac{1}{x} = \frac{1}{x\ln a} \qquad \blacksquare$$
+      </div>
+    </div>
+  </div>
+
+  <!-- §4 Trig -->
+  <div class="section fade-in" id="sec-trig">
+    <div class="section-header">
+      <span class="section-number">§ 4</span>
+      <span class="section-title">三角函数的导数</span>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">4.1　正弦函数 $\sin x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 6</div>
+        $$(\sin x)' = \cos x$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        $$(\sin x)' = \lim_{h \to 0}\frac{\sin(x+h) - \sin x}{h}$$
+        <p>利用<strong>和差化积</strong>公式 $\sin A - \sin B = 2\cos\dfrac{A+B}{2}\sin\dfrac{A-B}{2}$：</p>
+        $$= \lim_{h \to 0}\frac{2\cos\!\left(x + \dfrac{h}{2}\right)\sin\dfrac{h}{2}}{h} = \lim_{h \to 0}\cos\!\left(x + \frac{h}{2}\right) \cdot \frac{\sin\frac{h}{2}}{\frac{h}{2}}$$
+        <p>令 $u = \dfrac{h}{2} \to 0$，由基本极限 $\displaystyle\lim_{u \to 0}\dfrac{\sin u}{u} = 1$，以及 $\cos$ 的连续性：</p>
+        $$= \cos x \cdot 1 = \cos x \qquad \blacksquare$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">4.2　余弦函数 $\cos x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 7</div>
+        $$(\cos x)' = -\sin x$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        $$(\cos x)' = \lim_{h \to 0}\frac{\cos(x+h) - \cos x}{h}$$
+        <p>利用<strong>和差化积</strong>公式 $\cos A - \cos B = -2\sin\dfrac{A+B}{2}\sin\dfrac{A-B}{2}$：</p>
+        $$= \lim_{h \to 0}\frac{-2\sin\!\left(x+\dfrac{h}{2}\right)\sin\dfrac{h}{2}}{h} = -\lim_{h \to 0}\sin\!\left(x + \frac{h}{2}\right) \cdot \frac{\sin\frac{h}{2}}{\frac{h}{2}}$$
+        $$= -\sin x \cdot 1 = -\sin x \qquad \blacksquare$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">4.3　正切函数 $\tan x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 8</div>
+        $$(\tan x)' = \sec^2 x = \frac{1}{\cos^2 x}$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明（利用商法则，见 §7）</div>
+        <p>写 $\tan x = \dfrac{\sin x}{\cos x}$，应用商的求导法则：</p>
+        $$(\tan x)' = \left(\frac{\sin x}{\cos x}\right)' = \frac{(\sin x)' \cdot \cos x - \sin x \cdot (\cos x)'}{\cos^2 x}$$
+        $$= \frac{\cos x \cdot \cos x - \sin x \cdot (-\sin x)}{\cos^2 x} = \frac{\cos^2 x + \sin^2 x}{\cos^2 x}$$
+        <p>由勾股恒等式 $\sin^2 x + \cos^2 x = 1$：</p>
+        $$(\tan x)' = \frac{1}{\cos^2 x} = \sec^2 x \qquad \blacksquare$$
+      </div>
+    </div>
+  </div>
+
+  <!-- §5 Inverse Trig -->
+  <div class="section fade-in" id="sec-invtrig">
+    <div class="section-header">
+      <span class="section-number">§ 5</span>
+      <span class="section-title">反三角函数的导数</span>
+    </div>
+
+    <div class="note">
+      <span class="note-label">反函数求导法</span><br>
+      设 $y = f^{-1}(x)$ 是 $x = f(y)$ 的反函数，对 $x = f(y)$ 两边关于 $x$ 求导，由链式法则得
+      $$1 = f'(y) \cdot \frac{dy}{dx} \implies \frac{dy}{dx} = \frac{1}{f'(y)}$$
+      以下三个证明均采用此方法。
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.1　反正弦 $\arcsin x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 9</div>
+        $$(\arcsin x)' = \frac{1}{\sqrt{1-x^2}} \qquad (-1 &lt; x &lt; 1)$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        <p>令 $y = \arcsin x$，则 $\sin y = x$，$y \in \left[-\dfrac{\pi}{2},\,\dfrac{\pi}{2}\right]$。</p>
+        <p>对 $\sin y = x$ 两边关于 $x$ 求导（$y$ 是 $x$ 的函数）：</p>
+        $$\cos y \cdot y' = 1 \implies y' = \frac{1}{\cos y}$$
+        <p>因 $y \in \left[-\dfrac{\pi}{2},\dfrac{\pi}{2}\right]$，故 $\cos y \geq 0$，从而</p>
+        $$\cos y = \sqrt{1 - \sin^2 y} = \sqrt{1 - x^2}$$
+        $$\therefore \quad (\arcsin x)' = \frac{1}{\sqrt{1-x^2}} \qquad \blacksquare$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.2　反余弦 $\arccos x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 10</div>
+        $$(\arccos x)' = -\frac{1}{\sqrt{1-x^2}} \qquad (-1 &lt; x &lt; 1)$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        <p>令 $y = \arccos x$，则 $\cos y = x$，$y \in [0,\,\pi]$。</p>
+        <p>对 $\cos y = x$ 两边关于 $x$ 求导：</p>
+        $$-\sin y \cdot y' = 1 \implies y' = -\frac{1}{\sin y}$$
+        <p>因 $y \in [0,\pi]$，故 $\sin y \geq 0$，从而 $\sin y = \sqrt{1-\cos^2 y} = \sqrt{1-x^2}$，于是</p>
+        $$(\arccos x)' = -\frac{1}{\sqrt{1-x^2}} \qquad \blacksquare$$
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subsection-title">5.3　反正切 $\arctan x$</div>
+      <div class="theorem">
+        <div class="theorem-title">定理 11</div>
+        $$(\arctan x)' = \frac{1}{1+x^2}$$
+      </div>
+      <div class="proof">
+        <div class="proof-title">证明</div>
+        <p>令 $y = \arctan x$，则 $\tan y = x$，$y \in \left(-\dfrac{\pi}{2},\,\dfrac{\pi}{2}\right)$。</p>
+        <p>对 $\tan y = x$ 两边关于 $x$ 求导：</p>
+        $$\sec^2 y \cdot y' = 1 \implies y' = \frac{1}{\sec^2 y}$$
+        <p>利用恒等式 $\sec^2 y = 1 + \tan^2 y$，将 $\tan y = x$ 代入：</p>
+        $$\sec^2 y = 1 + x^2$$
+        $$\therefore \quad (\arctan x)' = \frac{1}{1 + x^2} \qquad \blacksquare$$
+      </div>
+    </div>
+  </div>
+
+  <!-- §6 Arithmetic Rules -->
+  <div class="section fade-in" id="sec-rules">
+    <div class="section-header">
+      <span class="section-number">§ 6</span>
+      <span class="section-title">四则运算法则</span>
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定理 12（线性法则）</div>
+      <p>设 $f,g$ 在 $x$ 处均可导，$c$ 为常数，则</p>
+      $$(f \pm g)' = f' \pm g', \qquad (cf)' = cf'$$
+    </div>
+    <div class="proof">
+      <div class="proof-title">证明（以求和为例）</div>
+      $$(f+g)' = \lim_{h \to 0}\frac{[f(x+h)+g(x+h)]-[f(x)+g(x)]}{h}$$
+      $$= \lim_{h \to 0}\frac{f(x+h)-f(x)}{h} + \lim_{h \to 0}\frac{g(x+h)-g(x)}{h} = f'(x) + g'(x) \qquad \blacksquare$$
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定理 13（乘积法则 / 莱布尼兹法则）</div>
+      $$(fg)' = f'g + fg'$$
+    </div>
+    <div class="proof">
+      <div class="proof-title">证明</div>
+      $$(fg)' = \lim_{h \to 0}\frac{f(x+h)\,g(x+h) - f(x)\,g(x)}{h}$$
+      <p>在分子中<strong>加减</strong> $f(x)\,g(x+h)$（此为常见配凑技巧）：</p>
+      $$= \lim_{h \to 0}\frac{[f(x+h)-f(x)]\,g(x+h) + f(x)\,[g(x+h)-g(x)]}{h}$$
+      $$= \lim_{h \to 0}\frac{f(x+h)-f(x)}{h}\cdot g(x+h) + f(x)\cdot\lim_{h \to 0}\frac{g(x+h)-g(x)}{h}$$
+      <p>$g$ 可导则连续，故 $h \to 0$ 时 $g(x+h) \to g(x)$，于是：</p>
+      $$(fg)' = f'(x)\cdot g(x) + f(x)\cdot g'(x) \qquad \blacksquare$$
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定理 14（商的法则）</div>
+      $$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2} \qquad (g \neq 0)$$
+    </div>
+    <div class="proof">
+      <div class="proof-title">证明（由乘积法则推导）</div>
+      <p>令 $Q = \dfrac{f}{g}$，则 $f = Q \cdot g$。对两边用乘积法则求导：</p>
+      $$f' = Q'g + Qg'$$
+      <p>解出 $Q'$：</p>
+      $$Q' = \frac{f' - Qg'}{g} = \frac{f' - \dfrac{f}{g}\cdot g'}{g} = \frac{f'g - fg'}{g^2} \qquad \blacksquare$$
+    </div>
+  </div>
+
+  <!-- §7 Chain Rule -->
+  <div class="section fade-in" id="sec-chain">
+    <div class="section-header">
+      <span class="section-number">§ 7</span>
+      <span class="section-title">链式法则（复合函数求导）</span>
+    </div>
+
+    <div class="theorem">
+      <div class="theorem-title">定理 15（链式法则）</div>
+      <p>设 $u = g(x)$ 在 $x$ 处可导，$y = f(u)$ 在 $u = g(x)$ 处可导，则复合函数 $y = f(g(x))$ 在 $x$ 处可导，且</p>
+      $$\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx} = f'(g(x)) \cdot g'(x)$$
+    </div>
+
+    <div class="proof">
+      <div class="proof-title">证明</div>
+      <p>给 $x$ 增量 $\Delta x \neq 0$，对应 $\Delta u = g(x + \Delta x) - g(x)$，再对应 $\Delta y = f(u + \Delta u) - f(u)$。</p>
+      <p>当 $\Delta u \neq 0$ 时，恒等变形：</p>
+      $$\frac{\Delta y}{\Delta x} = \frac{\Delta y}{\Delta u} \cdot \frac{\Delta u}{\Delta x}$$
+      <p>令 $\Delta x \to 0$：由 $g$ 连续知 $\Delta u \to 0$，故两个比值分别趋向各自的导数：</p>
+      $$\frac{dy}{dx} = \lim_{\Delta u \to 0}\frac{\Delta y}{\Delta u} \cdot \lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} = f'(u) \cdot g'(x) \qquad \blacksquare$$
+    </div>
+
+    <div class="note">
+      <span class="note-label">应用示例</span><br>
+      <p>（1）$\left(\sin(x^2)\right)'$：令 $u = x^2$，</p>
+      $$\left(\sin(x^2)\right)' = \cos(x^2) \cdot (x^2)' = 2x\cos(x^2)$$
+      <p>（2）$\left(e^{-x^2}\right)'$：令 $u = -x^2$，</p>
+      $$\left(e^{-x^2}\right)' = e^{-x^2} \cdot (-x^2)' = -2x\,e^{-x^2}$$
+      <p>（3）$\left(\ln(\cos x)\right)'$：令 $u = \cos x$，</p>
+      $$\left(\ln(\cos x)\right)' = \frac{1}{\cos x} \cdot (-\sin x) = -\tan x$$
+    </div>
+  </div>
+
+  <!-- Summary Table -->
+  <div class="section fade-in" id="sec-summary">
+    <div class="section-header">
+      <span class="section-number">附表</span>
+      <span class="section-title">求导公式汇总</span>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th style="width:28%">函数 $f(x)$</th>
+            <th style="width:36%">导数 $f'(x)$</th>
+            <th>条件 / 备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$c$（常数）</td>
+            <td>$0$</td>
+            <td class="table-note"></td>
+          </tr>
+          <tr>
+            <td>$x^n$</td>
+            <td>$nx^{n-1}$</td>
+            <td class="table-note">$n$ 为实数</td>
+          </tr>
+          <tr>
+            <td>$e^x$</td>
+            <td>$e^x$</td>
+            <td class="table-note"></td>
+          </tr>
+          <tr>
+            <td>$a^x$</td>
+            <td>$a^x \ln a$</td>
+            <td class="table-note">$a &gt; 0,\ a \neq 1$</td>
+          </tr>
+          <tr>
+            <td>$\ln x$</td>
+            <td>$\dfrac{1}{x}$</td>
+            <td class="table-note">$x &gt; 0$</td>
+          </tr>
+          <tr>
+            <td>$\log_a x$</td>
+            <td>$\dfrac{1}{x \ln a}$</td>
+            <td class="table-note">$a &gt; 0,\ a \neq 1,\ x &gt; 0$</td>
+          </tr>
+          <tr>
+            <td>$\sin x$</td>
+            <td>$\cos x$</td>
+            <td class="table-note"></td>
+          </tr>
+          <tr>
+            <td>$\cos x$</td>
+            <td>$-\sin x$</td>
+            <td class="table-note"></td>
+          </tr>
+          <tr>
+            <td>$\tan x$</td>
+            <td>$\sec^2 x = \dfrac{1}{\cos^2 x}$</td>
+            <td class="table-note">$x \neq \dfrac{\pi}{2}+k\pi$</td>
+          </tr>
+          <tr>
+            <td>$\arcsin x$</td>
+            <td>$\dfrac{1}{\sqrt{1-x^2}}$</td>
+            <td class="table-note">$|x| &lt; 1$</td>
+          </tr>
+          <tr>
+            <td>$\arccos x$</td>
+            <td>$-\dfrac{1}{\sqrt{1-x^2}}$</td>
+            <td class="table-note">$|x| &lt; 1$</td>
+          </tr>
+          <tr>
+            <td>$\arctan x$</td>
+            <td>$\dfrac{1}{1+x^2}$</td>
+            <td class="table-note"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:28px;">
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th style="width:28%">法则</th>
+            <th>公式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>线性法则</td>
+            <td>$(f \pm g)' = f' \pm g'$，\quad $(cf)' = cf'$</td>
+          </tr>
+          <tr>
+            <td>乘积法则</td>
+            <td>$(fg)' = f'g + fg'$</td>
+          </tr>
+          <tr>
+            <td>商的法则</td>
+            <td>$\left(\dfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}$</td>
+          </tr>
+          <tr>
+            <td>链式法则</td>
+            <td>$[f(g(x))]' = f'(g(x)) \cdot g'(x)$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  高等数学 · 微分学基础&emsp;|&emsp;适用于理工科大学一年级
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
